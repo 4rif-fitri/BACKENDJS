@@ -1,16 +1,22 @@
-let express = require("express")
-let cors = require("cors")
-let mysql = require("mysql2")
-let port = 3200
+let express = require("express");
+let cors = require("cors");
+// let mysql = require("mysql2");
+let port = 3200;
 
-let usersEndpoint = require("./routes/users")
+const sequelize = require("./db.config");
+sequelize.sync().then(() => console.log("ready"));
 
-let app = express()
-app.use(cors())
-app.use(express.json())
+//thing
+let usersEndpoint = require("./routes/users");
 
-app.use("/",usersEndpoint)
+let app = express();
+app.use(cors());
+app.use(express.json());
+
+//thing
+app.use("/users", usersEndpoint);
+//       /users/usersEndpoint
 
 app.listen(port, () => {
-	console.log(`server on port ${port}`)
+  console.log(`server on port ${port}`);
 });

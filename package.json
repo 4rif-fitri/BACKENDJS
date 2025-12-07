@@ -4,7 +4,7 @@
   "description": "backend",
   "main": "server.js",
   "scripts": {
-    "api": "node server.js"
+    "api": "nodemon server.js"
   },
   "keywords": [
     "express",
@@ -14,8 +14,9 @@
   "author": "lynax",
   "license": "ISC",
   "dependencies": {
+    "cores": "^0.8.5",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "mysql2": "^3.15.3",
     "sequelize": "^6.37.7"
   },
