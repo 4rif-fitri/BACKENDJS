@@ -2,6 +2,8 @@ let express = require("express");
 let router = express.Router();
 const UsersModel = require("../models/Users");
 const bcrypt = require("bcrypt");
+const { where } = require("sequelize");
+const passwordCheck = require("../utils/passwordCheck");
 
 router.get("/", async (req, res) => {
   const users = await UsersModel.findAll();
@@ -48,17 +50,13 @@ router.put("/", async (req, res) => {
 
   const { nip, password, newPassword } = req.body;
 
-  // 1. Cari user
-  const userData = await UsersModel.findOne({ where: { nip } });
-  if (!userData) return res.status(404).json({ message: "User tidak ditemui" });
+  // const userData = await UsersModel.findOne({ where: { nip } });
+  // const betul = await bcrypt.compare(password, hashDalamDB);
 
-  const hashDalamDB = userData.password; // hashed password lama
-
-  // 2. Compare password lama (input) dengan hashed DB
+  const betul = await passwordCheck(nip, password);
 
   // res.json({ hashDalamDB });
-  const betul = await bcrypt.compare(password, hashDalamDB);
-  if (!betul) {
+  if (!betul.compare) {
     return res.status(400).json({ message: "Password lama salah" });
   }
 
@@ -105,5 +103,23 @@ router.put("/", async (req, res) => {
 //   });
 // });
 // /bayar
+
+router.post("/login", async (req, res) => {
+  const { nip, password } = req.body;
+
+  const c = await passwordCheck(nip, password);
+
+  if (c.compare === true) {
+    res.status(200).json({
+      data: c.userData,
+      metadata: "login berjaya",
+    });
+  } else {
+    res.status(400).json({
+      data: "err",
+      metadata: "login gagal",
+    });
+  }
+});
 
 module.exports = router;
