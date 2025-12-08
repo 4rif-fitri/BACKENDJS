@@ -1,4 +1,3 @@
-				
 run project \/
 
 #npm run api
@@ -6,3 +5,4 @@ run project \/
 npm i express --save
 npm i nodemon --save-dev
 npm i mysql2 cores sequelize --save  
+npm i bcrypt --save
